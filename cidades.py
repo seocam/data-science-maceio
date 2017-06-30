@@ -59,10 +59,14 @@ def application(environ, start_response):
     if query_string:
         params = parse_qs(query_string)
         sql = params.get('sql')[0]
-        template_html += '<br>' + sql + '<br><br>'
+        template_html += '<br>' + sql + '<br><br><table>'
         tuplas = conn.execute(sql)
         for tupla in tuplas:
-            template_html += str(tupla) + '<br>'
+            template_html += '<tr>'
+            for coluna in tupla:
+                template_html += '<td>{}</td>'.format(coluna)
+            template_html += '</tr>'
+        template_html += '</table>'
     start_response(status, headers)
     return [template_html.encode('utf-8')]
 
