@@ -26,7 +26,7 @@ with zipfile.ZipFile(zip_path) as cidades_zip:
 
 # Cria o bando de dados
 conn = sqlite3.connect(cidades_db)
-conn.execute('CREATE TABLE cidades (cep text, nome text, estado text);')
+conn.execute('CREATE TABLE IF NOT EXISTS cidades (cep text, nome text, estado text);')
 conn.commit()
 
 # Le arquivo CSV
