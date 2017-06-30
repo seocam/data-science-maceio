@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import csv
 import os
 import urllib.request
 import zipfile
@@ -20,3 +21,8 @@ else:
 with zipfile.ZipFile(zip_path) as cidades_zip:
     print('Descompactando arquivo de cidades')
     cidades_zip.extractall(unzip_path)
+
+# Le arquivo CSV
+with open(unzip_path + 'BR.txt') as cidades_file:
+    for linha in csv.reader(cidades_file, delimiter='\t'):
+        print(linha)
