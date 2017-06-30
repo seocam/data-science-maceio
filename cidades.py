@@ -13,6 +13,12 @@ url = 'http://download.geonames.org/export/zip/BR.zip'
 zip_path = '/tmp/BR.zip'
 unzip_path = '/tmp/cidades/'
 cidades_db = '/tmp/cidades.db'
+TEMPLATE_HTML = '''
+<form>
+  <input name="sql">
+  <input type="submit">
+</form>
+'''
 
 if not os.path.exists(zip_path):
     # Download das cidades brasileiras
@@ -48,7 +54,7 @@ def application(environ, start_response):
     status = '200 OK'
     headers = [('Content-Type', 'text/html; charset=utf-8')]
     start_response(status, headers)
-    return ['Olá Mundo!'.encode('utf-8')]
+    return [template_html.encode('utf-8')]
 
 
 with make_server('', 8000, application) as server:
