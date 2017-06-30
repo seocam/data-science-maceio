@@ -6,6 +6,8 @@ import urllib.request
 import sqlite3
 import zipfile
 
+from wsgiref.simple_server import make_server
+
 
 url = 'http://download.geonames.org/export/zip/BR.zip'
 zip_path = '/tmp/BR.zip'
@@ -40,3 +42,15 @@ with open(unzip_path + 'BR.txt') as cidades_file:
             continue
 
     conn.commit()
+
+
+def application(environ, start_response):
+    status = '200 OK'
+    headers = [('Content-Type', 'text/html; charset=utf-8')]
+    start_response(status, headers)
+    return ['Olá Mundo!'.encode('utf-8')]
+
+
+with make_server('', 8000, application) as server:
+    print('Servidor http rodando...')
+    server.serve_forever()
