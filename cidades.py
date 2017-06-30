@@ -6,6 +6,7 @@ import urllib.request
 import sqlite3
 import zipfile
 
+from cgi import parse_qs
 from wsgiref.simple_server import make_server
 
 
@@ -53,6 +54,12 @@ with open(unzip_path + 'BR.txt') as cidades_file:
 def application(environ, start_response):
     status = '200 OK'
     headers = [('Content-Type', 'text/html; charset=utf-8')]
+    query_string = environ.get('QUERY_STRING')
+    template_html = TEMPLATE_HTML[:]
+    if query_string:
+        params = parse_qs(query_string)
+        sql = params.get('sql')[0]
+        template_html += '<br>' + sql
     start_response(status, headers)
     return [template_html.encode('utf-8')]
 
