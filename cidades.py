@@ -26,10 +26,17 @@ with zipfile.ZipFile(zip_path) as cidades_zip:
 
 # Cria o bando de dados
 conn = sqlite3.connect(cidades_db)
-conn.execute('CREATE TABLE IF NOT EXISTS cidades (cep text, nome text, estado text);')
+conn.execute('CREATE TABLE IF NOT EXISTS cidades '
+             '(cep text PRIMARY KEY, nome text, estado text);')
 conn.commit()
 
 # Le arquivo CSV
 with open(unzip_path + 'BR.txt') as cidades_file:
     for linha in csv.reader(cidades_file, delimiter='\t'):
-        print(linha)
+        try:
+            conn.execute('INSERT INTO cidades (cep, nome, estado) '
+                         'VALUES (?, ?, ? )', (linha[1], linha[2], linha[3]))
+        except sqlite3.IntegrityError:
+            continue
+
+    conn.commit()
